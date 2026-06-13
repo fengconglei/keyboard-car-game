@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>字母赛车键盘练习</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app">
+    <section class="hud" aria-label="游戏状态">
+      <div>
+        <p class="eyebrow">字母赛车</p>
+        <h1>键盘小车手</h1>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <span>得分</span>
+          <strong id="score">0</strong>
+        </div>
+        <div class="stat">
+          <span>连击</span>
+          <strong id="streak">0</strong>
+        </div>
+        <div class="stat">
+          <span>时间</span>
+          <strong id="time">60</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="game-shell" aria-label="键盘练习游戏">
+      <div class="road-wrap">
+        <div class="road" id="road">
+          <div class="lane-line lane-line-a"></div>
+          <div class="lane-line lane-line-b"></div>
+          <div class="finish-glow" id="finishGlow"></div>
+          <div class="target-sign" id="targetSign" aria-live="polite">A</div>
+          <div class="car" id="car" aria-hidden="true">
+            <div class="car-top"></div>
+            <div class="car-body">
+              <span class="window"></span>
+              <span class="headlight"></span>
+            </div>
+            <span class="wheel wheel-left"></span>
+            <span class="wheel wheel-right"></span>
+          </div>
+          <div class="message" id="message">按“开始”出发</div>
+        </div>
+      </div>
+
+      <aside class="panel" aria-label="游戏控制">
+        <div class="target-card">
+          <span>请按这个键</span>
+          <strong id="bigLetter">A</strong>
+        </div>
+        <div class="controls">
+          <button id="startBtn" type="button">开始游戏</button>
+          <button id="soundBtn" type="button" class="secondary" aria-pressed="true">音效开</button>
+        </div>
+        <div class="level">
+          <label for="speedRange">速度</label>
+          <input id="speedRange" type="range" min="1" max="3" value="1">
+          <span id="speedLabel">轻松</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="keyboard-stage" aria-label="屏幕键盘">
+      <div class="keyboard-title">
+        <span>键盘地图</span>
+        <strong id="keyboardHint">找一找 A 在哪里</strong>
+      </div>
+      <div class="keyboard" id="keyboard"></div>
+    </section>
+  </main>
+
+  <script src="game.js"></script>
+</body>
+</html>
