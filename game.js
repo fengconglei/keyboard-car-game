@@ -26,6 +26,7 @@ let playing = false;
 let soundOn = true;
 let audioContext = null;
 let lastLetter = "";
+let preferredVoice = null;
 
 function buildKeyboard() {
   keyboard.innerHTML = "";
@@ -54,6 +55,9 @@ function setTarget() {
     key.classList.toggle("active", key.dataset.key === target);
     key.classList.remove("hit", "miss");
   });
+  if (playing) {
+    speakLetter(target);
+  }
 }
 
 function updateStats() {
@@ -91,6 +95,26 @@ function playTone(type) {
   gain.connect(ctx.destination);
   osc.start(now);
   osc.stop(now + 0.2);
+}
+
+function getEnglishVoice() {
+  if (!("speechSynthesis" in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  preferredVoice = preferredVoice || voices.find((voice) => voice.lang.startsWith("en"));
+  return preferredVoice;
+}
+
+function speakLetter(letter) {
+  if (!soundOn || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(letter);
+  utterance.lang = "en-US";
+  utterance.rate = 0.72;
+  utterance.pitch = 1.12;
+  utterance.volume = 1;
+  const voice = getEnglishVoice();
+  if (voice) utterance.voice = voice;
+  window.speechSynthesis.speak(utterance);
 }
 
 function levelSeconds() {
@@ -169,9 +193,16 @@ startBtn.addEventListener("click", startGame);
 
 soundBtn.addEventListener("click", () => {
   soundOn = !soundOn;
-  soundBtn.textContent = soundOn ? "音效开" : "音效关";
+  if (!soundOn && "speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+  soundBtn.textContent = soundOn ? "声音开" : "声音关";
   soundBtn.setAttribute("aria-pressed", String(soundOn));
 });
+
+if ("speechSynthesis" in window) {
+  window.speechSynthesis.addEventListener("voiceschanged", getEnglishVoice);
+}
 
 speedRange.addEventListener("input", () => {
   speedLabel.textContent = ["轻松", "标准", "挑战"][Number(speedRange.value) - 1];
